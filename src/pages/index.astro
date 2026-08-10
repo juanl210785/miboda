@@ -62,7 +62,11 @@ const novios = "Juan Luis y Wlaismar";
                 right: calc(1rem + env(safe-area-inset-right));
             }
         </style>
+        <script
+            src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"
+        ></script>
     </head>
+
     <body class="bg-stone-50 text-stone-800 antialiased selection:bg-amber-200">
         <!-- 1. HERO SECTION -->
         <header
@@ -639,24 +643,24 @@ const novios = "Juan Luis y Wlaismar";
                         photosGrid.innerHTML = photos
                             .map(
                                 (photo) => `
-                    <div 
-                        class="photo-card group relative aspect-square overflow-hidden rounded-xl bg-stone-200 shadow-sm cursor-pointer"
-                        data-url="${photo.url}"
-                        data-nombre="${photo.nombre_invitado || "Invitado"}"
-                        data-comentario="${photo.comentario || ""}"
-                    >
-                        <img
-                            src="${photo.url}"
-                            alt="Foto por ${photo.nombre_invitado || "Invitado"}"
-                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                            loading="lazy"
-                        />
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 text-white">
-                            <p class="text-xs font-semibold">${photo.nombre_invitado || "Invitado"}</p>
-                            ${photo.comentario ? `<p class="text-[10px] text-stone-200 line-clamp-2">${photo.comentario}</p>` : ""}
-                        </div>
-                    </div>
-                `,
+            <div 
+                class="photo-card group relative aspect-square overflow-hidden rounded-xl bg-stone-200 shadow-sm cursor-pointer"
+                data-url="${photo.url}"
+                data-nombre="${photo.nombre_invitado || "Invitado"}"
+                data-comentario="${photo.comentario || ""}"
+            >
+                <img
+                    src="${photo.url}"
+                    alt="Foto por ${photo.nombre_invitado || "Invitado"}"
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 text-white">
+                    <p class="text-xs font-semibold">${photo.nombre_invitado || "Invitado"}</p>
+                    ${photo.comentario ? `<p class="text-[10px] text-stone-200 line-clamp-2">${photo.comentario}</p>` : ""}
+                </div>
+            </div>
+        `,
                             )
                             .join("");
 
@@ -700,17 +704,61 @@ const novios = "Juan Luis y Wlaismar";
                 btnUpload.disabled = true;
                 btnUpload.innerText =
                     totalFiles > 1
-                        ? `Subiendo ${totalFiles} fotos...`
-                        : "Subiendo...";
+                        ? `Procesando ${totalFiles} fotos...`
+                        : "Procesando...";
                 uploadStatus?.classList.add("hidden");
 
                 const formData = new FormData();
-                Array.from(fileInput.files).forEach((file) => {
-                    formData.append("photos", file);
-                });
+
+                // --- INICIO DE CONVERSIÓN DE FOTOS HEIC / HEIF ---
+                for (const file of Array.from(fileInput.files)) {
+                    let fileToUpload = file;
+
+                    // Detectar si el archivo es HEIC / HEIF
+                    const isHeic =
+                        file.name.toLowerCase().endsWith(".heic") ||
+                        file.name.toLowerCase().endsWith(".heif") ||
+                        file.type === "image/heic" ||
+                        file.type === "image/heif";
+
+                    if (isHeic && typeof heic2any !== "undefined") {
+                        try {
+                            btnUpload.innerText =
+                                "Convirtiendo formato HEIC...";
+                            const convertedBlob = await heic2any({
+                                blob: file,
+                                toType: "image/jpeg",
+                                quality: 0.8,
+                            });
+
+                            const convertedFile = Array.isArray(convertedBlob)
+                                ? convertedBlob[0]
+                                : convertedBlob;
+
+                            fileToUpload = new File(
+                                [convertedFile],
+                                file.name.replace(/\.(heic|heif)$/i, ".jpg"),
+                                { type: "image/jpeg" },
+                            );
+                        } catch (convErr) {
+                            console.error(
+                                "Error al convertir imagen HEIC:",
+                                convErr,
+                            );
+                        }
+                    }
+
+                    formData.append("photos", fileToUpload);
+                }
+                // --- FIN DE CONVERSIÓN ---
 
                 formData.append("nombre", nombre);
                 formData.append("comentario", comentario);
+
+                btnUpload.innerText =
+                    totalFiles > 1
+                        ? `Subiendo ${totalFiles} fotos...`
+                        : "Subiendo...";
 
                 try {
                     const response = await fetch("/api/upload-photo", {
