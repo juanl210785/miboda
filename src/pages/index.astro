@@ -9,8 +9,10 @@ const novios = "Juan Luis y Wlaismar";
     <head>
         <meta charset="utf-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <!-- 1. Ajuste de viewport-fit=cover para móviles -->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+        />
         <title>Nuestra Boda | {novios}</title>
         <!-- Fuentes de Google Fonts -->
         <link
@@ -25,7 +27,7 @@ const novios = "Juan Luis y Wlaismar";
                 font-family: "Plus Jakarta Sans", sans-serif;
             }
 
-            /* Estilos para la animación de abajo hacia arriba al hacer scroll */
+            /* Estilos para la animación de scroll */
             .reveal {
                 opacity: 0;
                 transform: translateY(40px);
@@ -39,7 +41,7 @@ const novios = "Juan Luis y Wlaismar";
                 transform: translateY(0);
             }
 
-            /* Animación para el mensaje de éxito */
+            /* Animación mensaje éxito */
             @keyframes fadeInUp {
                 from {
                     opacity: 0;
@@ -55,7 +57,6 @@ const novios = "Juan Luis y Wlaismar";
                 animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             }
 
-            /* Asegura que el botón flotante respete el margen seguro del navegador en móviles */
             .safe-bottom-right {
                 bottom: calc(1rem + env(safe-area-inset-bottom));
                 right: calc(1rem + env(safe-area-inset-right));
@@ -63,7 +64,7 @@ const novios = "Juan Luis y Wlaismar";
         </style>
     </head>
     <body class="bg-stone-50 text-stone-800 antialiased selection:bg-amber-200">
-        <!-- 1. HERO SECTION (Cambiado h-screen por h-dvh y pb adaptativo) -->
+        <!-- 1. HERO SECTION -->
         <header
             class="relative h-dvh flex flex-col items-center justify-between pt-8 pb-12 px-6 text-center bg-stone-900 text-white overflow-hidden"
         >
@@ -107,7 +108,6 @@ const novios = "Juan Luis y Wlaismar";
                 </p>
             </div>
 
-            <!-- BOTÓN ABRIR INVITACIÓN CON MARGEN ADECUADO -->
             <div class="relative z-10 reveal pb-2">
                 <a
                     id="open-invitation"
@@ -153,12 +153,16 @@ const novios = "Juan Luis y Wlaismar";
                     >
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow-sm w-16">
-                    <span id="minutes" class="block text-2xl font-bold">00</span>
-                    <span class="text-[10px] uppercase text-stone-400">Min</span>
+                    <span id="minutes" class="block text-2xl font-bold">00</span
+                    >
+                    <span class="text-[10px] uppercase text-stone-400">Min</span
+                    >
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow-sm w-16">
-                    <span id="seconds" class="block text-2xl font-bold">00</span>
-                    <span class="text-[10px] uppercase text-stone-400">Seg</span>
+                    <span id="seconds" class="block text-2xl font-bold">00</span
+                    >
+                    <span class="text-[10px] uppercase text-stone-400">Seg</span
+                    >
                 </div>
             </div>
         </section>
@@ -340,7 +344,7 @@ const novios = "Juan Luis y Wlaismar";
                 <button
                     type="submit"
                     id="submit-btn"
-                    class="w-full py-3 bg-stone-900 text-white rounded-lg text-xs uppercase tracking-wider font-semibold hover:bg-stone-800 transition cursor-pointer"
+                    class="w-full py-3 bg-stone-900 text-white rounded-lg text-xs uppercase tracking-wider font-semibold hover:bg-stone-800 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stone-900"
                 >
                     Enviar Confirmación
                 </button>
@@ -394,12 +398,11 @@ const novios = "Juan Luis y Wlaismar";
                             form.classList.add("hidden");
                             successMsg.classList.remove("hidden");
                         } else {
-                            errorMsg?.classList.remove("hidden");
-                            btn.disabled = false;
-                            btn.innerText = "Enviar Confirmación";
+                            throw new Error("Error al procesar el envío");
                         }
                     } catch (err) {
                         errorMsg?.classList.remove("hidden");
+                    } finally {
                         btn.disabled = false;
                         btn.innerText = "Enviar Confirmación";
                     }
@@ -407,7 +410,7 @@ const novios = "Juan Luis y Wlaismar";
             </script>
         </section>
 
-        <!-- SECCIÓN ÁLBUM DE FOTOS -->
+        <!-- SECCIÓN ÁLBUM DE FOTOS Y GALERÍA -->
         <section id="album" class="py-20 px-6 max-w-4xl mx-auto space-y-12">
             <div class="text-center space-y-2 reveal">
                 <h2 class="font-script text-4xl text-stone-700">
@@ -428,9 +431,13 @@ const novios = "Juan Luis y Wlaismar";
                     Álbum aún no activo
                 </h3>
                 <p class="text-stone-500 text-sm leading-relaxed">
-                    El día de la boda se activará el módulo de álbum de fotos para que puedas subir y compartir tus mejores momentos con nosotros.
+                    El día de la boda se activará el módulo de álbum de fotos
+                    para que puedas subir y compartir tus mejores momentos con
+                    nosotros.
                 </p>
-                <span class="inline-block text-[11px] font-medium text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60">
+                <span
+                    class="inline-block text-[11px] font-medium text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60"
+                >
                     Disponible el 20 de Diciembre de 2026
                 </span>
             </div>
@@ -483,7 +490,7 @@ const novios = "Juan Luis y Wlaismar";
                 <button
                     type="submit"
                     id="btn-upload"
-                    class="w-full py-3 bg-stone-900 text-white rounded-lg text-xs uppercase tracking-wider font-semibold hover:bg-stone-800 transition cursor-pointer"
+                    class="w-full py-3 bg-stone-900 text-white rounded-lg text-xs uppercase tracking-wider font-semibold hover:bg-stone-800 transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-stone-900"
                 >
                     Subir Fotos al Álbum
                 </button>
@@ -493,12 +500,80 @@ const novios = "Juan Luis y Wlaismar";
                 >
                 </p>
             </form>
+
+            <!-- 3. CONTENEDOR DE LA GALERÍA DE FOTOS (Oculto si no hay imágenes) -->
+            <div
+                id="gallery-container"
+                class="hidden space-y-6 pt-8 border-t border-stone-200"
+            >
+                <h3 class="font-script text-3xl text-center text-stone-700">
+                    Momentos Compartidos
+                </h3>
+                <div
+                    id="photos-grid"
+                    class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4"
+                >
+                    <!-- Se renderiza dinámicamente -->
+                </div>
+            </div>
         </section>
 
-        <!-- SCRIPT DEL ÁLBUM DE FOTOS -->
+        <!-- MODAL / LIGHTBOX PARA AMPLIAR FOTOS -->
+        <div
+            id="lightbox-modal"
+            class="fixed inset-0 z-50 bg-stone-950/90 backdrop-blur-sm hidden flex flex-col items-center justify-center p-4 transition-all duration-300"
+        >
+            <!-- Botón para cerrar -->
+            <button
+                id="close-lightbox"
+                class="absolute top-4 right-4 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-2.5 rounded-full transition text-sm z-10 cursor-pointer"
+                aria-label="Cerrar visor"
+            >
+                ✕
+            </button>
+
+            <!-- Contenedor de la Imagen e Información -->
+            <div
+                class="relative max-w-3xl max-h-[85vh] flex flex-col items-center justify-center overflow-hidden rounded-2xl bg-stone-900/60 border border-white/10 shadow-2xl"
+            >
+                <img
+                    id="lightbox-img"
+                    src=""
+                    alt="Foto ampliada"
+                    class="max-h-[70vh] w-auto object-contain rounded-t-2xl"
+                />
+                <div
+                    id="lightbox-info"
+                    class="w-full p-4 text-center bg-stone-900 text-white space-y-1 border-t border-stone-800"
+                >
+                    <p
+                        id="lightbox-author"
+                        class="text-sm font-semibold text-amber-200"
+                    >
+                    </p>
+                    <p
+                        id="lightbox-comment"
+                        class="text-xs text-stone-300 italic"
+                    >
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCRIPT UNIFICADO ÁLBUM DE FOTOS Y LIGHTBOX -->
         <script define:vars={{ fechaBoda }}>
             const lockedMsg = document.getElementById("album-locked-msg");
             const uploadForm = document.getElementById("upload-form");
+            const galleryContainer =
+                document.getElementById("gallery-container");
+            const photosGrid = document.getElementById("photos-grid");
+
+            // Elementos del Lightbox Modal
+            const lightboxModal = document.getElementById("lightbox-modal");
+            const lightboxImg = document.getElementById("lightbox-img");
+            const lightboxAuthor = document.getElementById("lightbox-author");
+            const lightboxComment = document.getElementById("lightbox-comment");
+            const closeLightboxBtn = document.getElementById("close-lightbox");
 
             const weddingDate = new Date(fechaBoda).getTime();
             const now = new Date().getTime();
@@ -506,11 +581,106 @@ const novios = "Juan Luis y Wlaismar";
             const urlParams = new URLSearchParams(window.location.search);
             const isTestMode = urlParams.get("testAlbum") === "true";
 
+            // --- LÓGICA DEL LIGHTBOX (VISOR) ---
+            function openLightbox(url, nombre, comentario) {
+                if (!lightboxModal || !lightboxImg) return;
+                lightboxImg.src = url;
+                lightboxAuthor.innerText = nombre
+                    ? `Subida por: ${nombre}`
+                    : "Invitado";
+                lightboxComment.innerText = comentario ? `"${comentario}"` : "";
+                lightboxModal.classList.remove("hidden");
+                document.body.style.overflow = "hidden"; // Desactiva scroll
+            }
+
+            function closeLightbox() {
+                if (!lightboxModal || !lightboxImg) return;
+                lightboxModal.classList.add("hidden");
+                lightboxImg.src = "";
+                document.body.style.overflow = ""; // Restaura scroll
+            }
+
+            closeLightboxBtn?.addEventListener("click", closeLightbox);
+
+            lightboxModal?.addEventListener("click", (e) => {
+                if (e.target === lightboxModal) closeLightbox();
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (
+                    e.key === "Escape" &&
+                    lightboxModal &&
+                    !lightboxModal.classList.contains("hidden")
+                ) {
+                    closeLightbox();
+                }
+            });
+
+            photosGrid?.addEventListener("click", (e) => {
+                const photoCard = e.target.closest(".photo-card");
+                if (!photoCard) return;
+
+                const url = photoCard.dataset.url;
+                const nombre = photoCard.dataset.nombre;
+                const comentario = photoCard.dataset.comentario;
+
+                openLightbox(url, nombre, comentario);
+            });
+
+            // 1. OBTENER Y MOSTRAR FOTOS
+            async function loadGallery() {
+                try {
+                    const res = await fetch("/api/photos");
+                    if (!res.ok) return;
+
+                    const photos = await res.json();
+
+                    if (Array.isArray(photos) && photos.length > 0) {
+                        photosGrid.innerHTML = photos
+                            .map(
+                                (photo) => `
+                    <div 
+                        class="photo-card group relative aspect-square overflow-hidden rounded-xl bg-stone-200 shadow-sm cursor-pointer"
+                        data-url="${photo.url}"
+                        data-nombre="${photo.nombre_invitado || "Invitado"}"
+                        data-comentario="${photo.comentario || ""}"
+                    >
+                        <img
+                            src="${photo.url}"
+                            alt="Foto por ${photo.nombre_invitado || "Invitado"}"
+                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            loading="lazy"
+                        />
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 text-white">
+                            <p class="text-xs font-semibold">${photo.nombre_invitado || "Invitado"}</p>
+                            ${photo.comentario ? `<p class="text-[10px] text-stone-200 line-clamp-2">${photo.comentario}</p>` : ""}
+                        </div>
+                    </div>
+                `,
+                            )
+                            .join("");
+
+                        galleryContainer?.classList.remove("hidden");
+                    } else {
+                        galleryContainer?.classList.add("hidden");
+                    }
+                } catch (err) {
+                    console.log(
+                        "No hay fotos para mostrar o no se pudo cargar la galería.",
+                    );
+                }
+            }
+
+            // Carga inicial
+            loadGallery();
+
+            // Desbloquear módulo de subida
             if (now >= weddingDate || isTestMode) {
                 lockedMsg?.classList.add("hidden");
                 uploadForm?.classList.remove("hidden");
             }
 
+            // 2. SUBIDA DE FOTOS
             const uploadStatus = document.getElementById("upload-status");
             const btnUpload = document.getElementById("btn-upload");
 
@@ -519,11 +689,14 @@ const novios = "Juan Luis y Wlaismar";
 
                 const nombre = document.getElementById("invitado-nombre").value;
                 const fileInput = document.getElementById("foto-file");
-                const comentario = document.getElementById("foto-comentario").value;
+                const comentario =
+                    document.getElementById("foto-comentario").value;
 
                 if (!fileInput.files || fileInput.files.length === 0) return;
 
                 const totalFiles = fileInput.files.length;
+
+                // Bloquea botón y muestra feedback
                 btnUpload.disabled = true;
                 btnUpload.innerText =
                     totalFiles > 1
@@ -532,7 +705,6 @@ const novios = "Juan Luis y Wlaismar";
                 uploadStatus?.classList.add("hidden");
 
                 const formData = new FormData();
-
                 Array.from(fileInput.files).forEach((file) => {
                     formData.append("photos", file);
                 });
@@ -554,6 +726,8 @@ const novios = "Juan Luis y Wlaismar";
                         uploadStatus.className =
                             "text-xs text-center mt-2 font-medium text-emerald-600 block";
                         uploadForm.reset();
+
+                        await loadGallery();
                     } else {
                         throw new Error("Error al subir las imágenes");
                     }
@@ -563,6 +737,7 @@ const novios = "Juan Luis y Wlaismar";
                     uploadStatus.className =
                         "text-xs text-center mt-2 font-medium text-rose-600 block";
                 } finally {
+                    // Desbloquea botón al finalizar
                     btnUpload.disabled = false;
                     btnUpload.innerText = "Subir Fotos al Álbum";
                 }
@@ -577,7 +752,7 @@ const novios = "Juan Luis y Wlaismar";
             <p>© 2026 - Con mucho amor</p>
         </footer>
 
-        <!-- SCRIPT PARA ANIMACIONES DE SCROLL -->
+        <!-- SCRIPT ANIMACIONES SCROLL -->
         <script>
             const observerOptions = {
                 root: null,
@@ -598,7 +773,7 @@ const novios = "Juan Luis y Wlaismar";
                 .forEach((el) => observer.observe(el));
         </script>
 
-        <!-- SCRIPT DE LA CUENTA REGRESIVA -->
+        <!-- SCRIPT CUENTA REGRESIVA -->
         <script define:vars={{ fechaBoda }}>
             const countdownDate = new Date(fechaBoda).getTime();
 
@@ -635,7 +810,7 @@ const novios = "Juan Luis y Wlaismar";
             updateCountdown();
         </script>
 
-        <!-- SCRIPT PARA CONTROLAR LA MÚSICA -->
+        <!-- SCRIPT CONTROL MÚSICA -->
         <script>
             const music = document.getElementById("bg-music");
             const toggleBtn = document.getElementById("music-toggle");
