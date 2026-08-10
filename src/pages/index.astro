@@ -28,7 +28,9 @@ const novios = "Juan Luis y Wlaismar";
             .reveal {
                 opacity: 0;
                 transform: translateY(40px);
-                transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+                transition:
+                    opacity 0.8s ease-out,
+                    transform 0.8s ease-out;
                 will-change: opacity, transform;
             }
             .reveal.active {
@@ -143,12 +145,16 @@ const novios = "Juan Luis y Wlaismar";
                     >
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow-sm w-16">
-                    <span id="minutes" class="block text-2xl font-bold">00</span>
-                    <span class="text-[10px] uppercase text-stone-400">Min</span>
+                    <span id="minutes" class="block text-2xl font-bold">00</span
+                    >
+                    <span class="text-[10px] uppercase text-stone-400">Min</span
+                    >
                 </div>
                 <div class="bg-white p-3 rounded-lg shadow-sm w-16">
-                    <span id="seconds" class="block text-2xl font-bold">00</span>
-                    <span class="text-[10px] uppercase text-stone-400">Seg</span>
+                    <span id="seconds" class="block text-2xl font-bold">00</span
+                    >
+                    <span class="text-[10px] uppercase text-stone-400">Seg</span
+                    >
                 </div>
             </div>
         </section>
@@ -173,7 +179,9 @@ const novios = "Juan Luis y Wlaismar";
                 >
                     ⛪ 🥂
                 </div>
-                <h3 class="font-semibold text-lg">Ceremonia Religiosa y Recepción</h3>
+                <h3 class="font-semibold text-lg">
+                    Ceremonia Religiosa y Recepción
+                </h3>
                 <p class="text-sm text-stone-500">
                     Parroquia San Antonio de Padua<br />16:00 hrs
                 </p>
@@ -396,6 +404,172 @@ const novios = "Juan Luis y Wlaismar";
             </script>
         </section>
 
+        <!-- SECCIÓN ÁLBUM DE FOTOS -->
+        <section id="album" class="py-20 px-6 max-w-4xl mx-auto space-y-12">
+            <div class="text-center space-y-2 reveal">
+                <h2 class="font-script text-4xl text-stone-700">
+                    Álbum de Recuerdos
+                </h2>
+                <p class="text-xs uppercase tracking-widest text-stone-400">
+                    Comparte las fotos que tomaste durante nuestro gran día
+                </p>
+            </div>
+
+            <!-- 1. MÓDULO BLOQUEADO (Mensaje de aviso previo al día de la boda) -->
+            <div
+                id="album-locked-msg"
+                class="bg-white p-8 rounded-2xl shadow-sm border border-stone-100 text-center space-y-3 max-w-md mx-auto reveal"
+            >
+                <div class="text-4xl">📸</div>
+                <h3 class="font-semibold text-stone-700 text-base">
+                    Álbum aún no activo
+                </h3>
+                <p class="text-stone-500 text-sm leading-relaxed">
+                    El día de la boda se activará el módulo de álbum de fotos para que puedas subir y compartir tus mejores momentos con nosotros.
+                </p>
+                <span class="inline-block text-[11px] font-medium text-amber-800 bg-amber-50 px-3 py-1 rounded-full border border-amber-200/60">
+                    Disponible el 20 de Diciembre de 2026
+                </span>
+            </div>
+
+            <!-- 2. FORMULARIO PARA SUBIR FOTOS (Oculto por defecto con la clase 'hidden') -->
+            <form
+                id="upload-form"
+                class="hidden bg-white p-6 rounded-2xl shadow-sm border border-stone-100 max-w-md mx-auto space-y-4"
+            >
+                <div>
+                    <label
+                        class="block text-xs font-semibold uppercase text-stone-600 mb-1"
+                        >Tu Nombre</label
+                    >
+                    <input
+                        type="text"
+                        id="invitado-nombre"
+                        required
+                        class="w-full px-4 py-2 border border-stone-200 rounded-lg text-sm"
+                        placeholder="Ej. Carlos Mendoza"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-semibold uppercase text-stone-600 mb-1"
+                        >Selecciona una o varias Fotos</label
+                    >
+                    <input
+                        type="file"
+                        id="foto-file"
+                        accept="image/*"
+                        multiple
+                        required
+                        class="w-full text-sm text-stone-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-amber-50 file:text-amber-800 hover:file:bg-amber-100"
+                    />
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-semibold uppercase text-stone-600 mb-1"
+                        >Mensaje o Dedicatoria (Opcional)</label
+                    >
+                    <textarea
+                        id="foto-comentario"
+                        class="w-full px-4 py-2 border border-stone-200 rounded-lg text-sm"
+                        placeholder="¡Qué gran momento!"></textarea>
+                </div>
+
+                <button
+                    type="submit"
+                    id="btn-upload"
+                    class="w-full py-3 bg-stone-900 text-white rounded-lg text-xs uppercase tracking-wider font-semibold hover:bg-stone-800 transition cursor-pointer"
+                >
+                    Subir Fotos al Álbum
+                </button>
+                <p
+                    id="upload-status"
+                    class="text-xs text-center hidden mt-2 font-medium"
+                >
+                </p>
+            </form>
+        </section>
+
+        <!-- SCRIPT DEL ÁLBUM DE FOTOS (Validación de fecha y envío de archivos) -->
+        <script define:vars={{ fechaBoda }}>
+            const lockedMsg = document.getElementById("album-locked-msg");
+            const uploadForm = document.getElementById("upload-form");
+
+            // 1. LÓGICA DE ACTIVACIÓN POR FECHA O PRUEBAS
+            const weddingDate = new Date(fechaBoda).getTime();
+            const now = new Date().getTime();
+
+            // Detecta si en la URL se pasa el parámetro de prueba: ?testAlbum=true
+            const urlParams = new URLSearchParams(window.location.search);
+            const isTestMode = urlParams.get("testAlbum") === "true";
+
+            // Si ya llegó el día de la boda o si estamos en modo prueba por URL
+            if (now >= weddingDate || isTestMode) {
+                lockedMsg?.classList.add("hidden");
+                uploadForm?.classList.remove("hidden");
+            }
+
+            // 2. ENVÍO DEL FORMULARIO
+            const uploadStatus = document.getElementById("upload-status");
+            const btnUpload = document.getElementById("btn-upload");
+
+            uploadForm?.addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const nombre = document.getElementById("invitado-nombre").value;
+                const fileInput = document.getElementById("foto-file");
+                const comentario = document.getElementById("foto-comentario").value;
+
+                if (!fileInput.files || fileInput.files.length === 0) return;
+
+                const totalFiles = fileInput.files.length;
+                btnUpload.disabled = true;
+                btnUpload.innerText =
+                    totalFiles > 1
+                        ? `Subiendo ${totalFiles} fotos...`
+                        : "Subiendo...";
+                uploadStatus?.classList.add("hidden");
+
+                const formData = new FormData();
+
+                Array.from(fileInput.files).forEach((file) => {
+                    formData.append("photos", file);
+                });
+
+                formData.append("nombre", nombre);
+                formData.append("comentario", comentario);
+
+                try {
+                    const response = await fetch("/api/upload-photo", {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    if (response.ok) {
+                        uploadStatus.innerText =
+                            totalFiles > 1
+                                ? "¡Fotos subidas con éxito!"
+                                : "¡Foto subida con éxito!";
+                        uploadStatus.className =
+                            "text-xs text-center mt-2 font-medium text-emerald-600 block";
+                        uploadForm.reset();
+                    } else {
+                        throw new Error("Error al subir las imágenes");
+                    }
+                } catch (err) {
+                    uploadStatus.innerText =
+                        "Ocurrió un error al subir las fotos.";
+                    uploadStatus.className =
+                        "text-xs text-center mt-2 font-medium text-rose-600 block";
+                } finally {
+                    btnUpload.disabled = false;
+                    btnUpload.innerText = "Subir Fotos al Álbum";
+                }
+            });
+        </script>
+
         <!-- 7. FOOTER -->
         <footer
             class="py-10 bg-stone-900 text-stone-400 text-center text-xs space-y-2 reveal"
@@ -420,7 +594,9 @@ const novios = "Juan Luis y Wlaismar";
                 });
             }, observerOptions);
 
-            document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+            document
+                .querySelectorAll(".reveal")
+                .forEach((el) => observer.observe(el));
         </script>
 
         <!-- SCRIPT DE LA CUENTA REGRESIVA -->
