@@ -1,7 +1,7 @@
 ---
 import "../styles/global.css";
 
-const fechaBoda = "2026-10-02T00:00:00";
+const fechaBoda = "2026-12-13T00:00:00";
 const novios = "Juan Luis y Wlaismar";
 ---
 
@@ -172,7 +172,7 @@ const novios = "Juan Luis y Wlaismar";
         </section>
 
         <!-- 4. ITINERARIO Y UBICACIÓN -->
-        <section class="py-20 px-6 max-w-md mx-auto space-y-12">
+        <section class="py-12 px-6 max-w-md mx-auto space-y-12">
             <div class="text-center space-y-2 reveal">
                 <h2 class="font-script text-4xl text-stone-700">
                     ¿Dónde y Cuándo?
@@ -208,7 +208,7 @@ const novios = "Juan Luis y Wlaismar";
         </section>
 
         <!-- 5. DRESS CODE Y REGALOS -->
-        <section class="py-16 bg-stone-100 px-6 text-center space-y-10">
+        <section class="py-12 bg-stone-100 px-6 text-center space-y-10">
             <div class="max-w-md mx-auto space-y-2 reveal">
                 <h2 class="font-script text-4xl text-stone-700">
                     Detalles Importantes
@@ -231,46 +231,84 @@ const novios = "Juan Luis y Wlaismar";
 
             <!-- Regalos / Lluvia de Sobres -->
             <div
-                class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm space-y-4 reveal"
+                class="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm space-y-6 reveal text-left"
             >
-                <div class="text-2xl">🎁</div>
-                <h3 class="font-semibold text-base">Mesa de Regalos</h3>
-                <p class="text-sm text-stone-600">
-                    "El mejor regalo es tu presencia, pero si deseas tener un
-                    detalle para ayudarnos a construir nuestro nuevo hogar,
-                    puedes hacerlo mediante pago movíl, divisas, binance o
-                    código QR:"
-                </p>
-
-                <!-- Datos Bancarios -->
-                <div
-                    class="bg-stone-50 p-4 rounded-xl text-left text-xs space-y-1 text-stone-600 border border-stone-200"
-                >
-                    <p><strong>Banco:</strong> Venezuela</p>
-                    <p><strong>Teléfono:</strong> 04243662542</p>
-                    <p><strong>C.I:</strong> 17062239</p>
+                <div class="text-center space-y-2">
+                    <div class="text-2xl">🎁</div>
+                    <h3 class="font-semibold text-base">Mesa de Regalos</h3>
+                    <p class="text-sm text-stone-600">
+                        "El mejor regalo es tu presencia, pero si deseas tener
+                        un detalle para ayudarnos a construir nuestro nuevo
+                        hogar, puedes hacerlo a través de los siguientes
+                        medios:"
+                    </p>
                 </div>
 
-                <!-- Código QR -->
-                <div class="pt-2">
-                    <div
-                        class="w-32 h-32 mx-auto bg-stone-200 rounded-lg flex items-center justify-center text-xs text-stone-500 border border-dashed border-stone-400"
+                <!-- MÉRITO 1: PAGO MÓVIL (BS) -->
+                <div
+                    class="bg-stone-50 p-4 rounded-xl space-y-3 border border-stone-200"
+                >
+                    <h4
+                        class="font-semibold text-xs text-stone-700 uppercase tracking-wider text-center"
                     >
-                        <img
-                            src="/QR_code.jpg"
-                            alt="Código QR de la boda"
-                            class=""
-                        />
+                        🇻🇪 Pago Móvil (Bolívares)
+                    </h4>
+                    <div class="text-xs space-y-1 text-stone-600">
+                        <p><strong>Banco:</strong> Venezuela</p>
+                        <p><strong>Teléfono:</strong> 04243662542</p>
+                        <p><strong>C.I:</strong> 17062239</p>
                     </div>
-                    <span class="text-[10px] text-stone-400 block mt-2"
-                        >Escanea para transferir directo</span
+                    <div class="pt-2 text-center">
+                        <div
+                            class="w-32 h-32 mx-auto bg-white p-1 rounded-lg border border-stone-200 shadow-sm overflow-hidden"
+                        >
+                            <img
+                                src="/QR_code.jpg"
+                                alt="Código QR Pago Móvil"
+                                class="w-full h-full object-contain"
+                            />
+                        </div>
+                        <span class="text-[10px] text-stone-400 block mt-1.5">
+                            Escanea para Pago Móvil
+                        </span>
+                    </div>
+                </div>
+
+                <!-- MÉRITO 2: BINANCE PAY (USDT) -->
+                <div
+                    class="bg-stone-50 p-4 rounded-xl space-y-3 border border-stone-200"
+                >
+                    <h4
+                        class="font-semibold text-xs text-stone-700 uppercase tracking-wider text-center"
                     >
+                        🟡 Binance Pay (USDT / Cripto)
+                    </h4>
+                    <div class="text-xs space-y-1 text-stone-600">
+                        <p><strong>Nickname:</strong> Juanl2107</p>
+                        <p>
+                            <strong>Email:</strong> tu_correo_binance@email.com
+                        </p>
+                    </div>
+                    <div class="pt-2 text-center">
+                        <div
+                            class="w-32 h-32 mx-auto bg-white p-1 rounded-lg border border-stone-200 shadow-sm overflow-hidden"
+                        >
+                            <img
+                                src="/Binance_QR.jpg"
+                                alt="Código QR Binance Pay"
+                                class="w-full h-full object-contain"
+                            />
+                        </div>
+                        <span class="text-[10px] text-stone-400 block mt-1.5">
+                            Escanea con la app de Binance
+                        </span>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- 6. FORMULARIO RSVP -->
-        <section class="py-20 px-6 max-w-md mx-auto space-y-6 reveal">
+        <section class="py-12 px-6 max-w-md mx-auto space-y-6 reveal">
             <div class="text-center space-y-2">
                 <h2 class="font-script text-4xl text-stone-700">
                     Confirmación
@@ -415,7 +453,7 @@ const novios = "Juan Luis y Wlaismar";
         </section>
 
         <!-- SECCIÓN ÁLBUM DE FOTOS Y GALERÍA -->
-        <section id="album" class="py-20 px-6 max-w-4xl mx-auto space-y-12">
+        <section id="album" class="py-12 px-6 max-w-4xl mx-auto space-y-12">
             <div class="text-center space-y-2 reveal">
                 <h2 class="font-script text-4xl text-stone-700">
                     Álbum de Recuerdos
