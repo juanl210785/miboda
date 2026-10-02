@@ -583,7 +583,7 @@ const novios = "Juan Luis y Wlaismar";
             const now = new Date().getTime();
 
             const urlParams = new URLSearchParams(window.location.search);
-            const isTestMode = urlParams.get("testAlbum") === "false";
+            const isTestMode = urlParams.get("testAlbum") === "true";
 
             // --- LÓGICA DEL LIGHTBOX (VISOR) ---
             function openLightbox(url, nombre, comentario) {
