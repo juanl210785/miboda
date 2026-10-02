@@ -684,9 +684,10 @@ const novios = "Juan Luis y Wlaismar";
                 uploadForm?.classList.remove("hidden");
             }
 
-            // 2. SUBIDA DE FOTOS
+            // 2. SUBIDA DE FOTOS (UNA POR UNA, MÁXIMO 5)
             const uploadStatus = document.getElementById("upload-status");
             const btnUpload = document.getElementById("btn-upload");
+            const MAX_PHOTOS = 5;
 
             uploadForm?.addEventListener("submit", async (e) => {
                 e.preventDefault();
@@ -698,23 +699,33 @@ const novios = "Juan Luis y Wlaismar";
 
                 if (!fileInput.files || fileInput.files.length === 0) return;
 
-                const totalFiles = fileInput.files.length;
+                const filesArray = Array.from(fileInput.files);
 
-                // Bloquea botón y muestra feedback
+                // Validar límite de 5 imágenes
+                if (filesArray.length > MAX_PHOTOS) {
+                    uploadStatus.innerText = `Solo puedes subir un máximo de ${MAX_PHOTOS} fotos a la vez.`;
+                    uploadStatus.className =
+                        "text-xs text-center mt-2 font-medium text-rose-600 block";
+                    uploadStatus.classList.remove("hidden");
+                    return;
+                }
+
+                // Bloquear botón y ocultar mensajes previos
                 btnUpload.disabled = true;
-                btnUpload.innerText =
-                    totalFiles > 1
-                        ? `Procesando ${totalFiles} fotos...`
-                        : "Procesando...";
                 uploadStatus?.classList.add("hidden");
 
-                const formData = new FormData();
+                let successCount = 0;
+                let errorCount = 0;
 
-                // --- INICIO DE CONVERSIÓN DE FOTOS HEIC / HEIF ---
-                for (const file of Array.from(fileInput.files)) {
+                // Iterar y enviar cada imagen por separado
+                for (let i = 0; i < filesArray.length; i++) {
+                    const file = filesArray[i];
+                    const currentStep = i + 1;
                     let fileToUpload = file;
 
-                    // Detectar si el archivo es HEIC / HEIF
+                    btnUpload.innerText = `Procesando ${currentStep} de ${filesArray.length}...`;
+
+                    // Detectar y convertir formato HEIC / HEIF si aplica
                     const isHeic =
                         file.name.toLowerCase().endsWith(".heic") ||
                         file.name.toLowerCase().endsWith(".heif") ||
@@ -723,8 +734,7 @@ const novios = "Juan Luis y Wlaismar";
 
                     if (isHeic && typeof heic2any !== "undefined") {
                         try {
-                            btnUpload.innerText =
-                                "Convirtiendo formato HEIC...";
+                            btnUpload.innerText = `Convirtiendo HEIC (${currentStep}/${filesArray.length})...`;
                             const convertedBlob = await heic2any({
                                 blob: file,
                                 toType: "image/jpeg",
@@ -748,47 +758,56 @@ const novios = "Juan Luis y Wlaismar";
                         }
                     }
 
+                    // Crear FormData individual para esta única imagen
+                    const formData = new FormData();
                     formData.append("photos", fileToUpload);
-                }
-                // --- FIN DE CONVERSIÓN ---
+                    formData.append("nombre", nombre);
+                    formData.append("comentario", comentario);
 
-                formData.append("nombre", nombre);
-                formData.append("comentario", comentario);
+                    btnUpload.innerText = `Subiendo ${currentStep} de ${filesArray.length}...`;
 
-                btnUpload.innerText =
-                    totalFiles > 1
-                        ? `Subiendo ${totalFiles} fotos...`
-                        : "Subiendo...";
+                    try {
+                        const response = await fetch("/api/upload-photo", {
+                            method: "POST",
+                            body: formData,
+                        });
 
-                try {
-                    const response = await fetch("/api/upload-photo", {
-                        method: "POST",
-                        body: formData,
-                    });
-
-                    if (response.ok) {
-                        uploadStatus.innerText =
-                            totalFiles > 1
-                                ? "¡Fotos subidas con éxito!"
-                                : "¡Foto subida con éxito!";
-                        uploadStatus.className =
-                            "text-xs text-center mt-2 font-medium text-emerald-600 block";
-                        uploadForm.reset();
-
-                        await loadGallery();
-                    } else {
-                        throw new Error("Error al subir las imágenes");
+                        if (response.ok) {
+                            successCount++;
+                        } else {
+                            errorCount++;
+                        }
+                    } catch (err) {
+                        errorCount++;
                     }
-                } catch (err) {
+                }
+
+                // Feedback al usuario según resultados
+                if (errorCount === 0) {
+                    uploadStatus.innerText =
+                        filesArray.length > 1
+                            ? "¡Todas las fotos fueron subidas con éxito!"
+                            : "¡Foto subida con éxito!";
+                    uploadStatus.className =
+                        "text-xs text-center mt-2 font-medium text-emerald-600 block";
+                    uploadForm.reset();
+                } else if (successCount > 0) {
+                    uploadStatus.innerText = `Se subieron ${successCount} fotos, pero ${errorCount} fallaron.`;
+                    uploadStatus.className =
+                        "text-xs text-center mt-2 font-medium text-amber-600 block";
+                } else {
                     uploadStatus.innerText =
                         "Ocurrió un error al subir las fotos.";
                     uploadStatus.className =
                         "text-xs text-center mt-2 font-medium text-rose-600 block";
-                } finally {
-                    // Desbloquea botón al finalizar
-                    btnUpload.disabled = false;
-                    btnUpload.innerText = "Subir Fotos al Álbum";
                 }
+
+                // Recargar la galería al terminar
+                await loadGallery();
+
+                // Restablecer botón
+                btnUpload.disabled = false;
+                btnUpload.innerText = "Subir Fotos al Álbum";
             });
         </script>
 
