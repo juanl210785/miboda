@@ -1024,5 +1024,49 @@ const novios = "Juan Luis y Wlaismar";
                 }
             });
         </script>
+
+        <!-- SCRIPT COPIAR DATOS -->
+        <script>
+            const btnCopiar = document.getElementById("btn-copiar-pm");
+
+            btnCopiar?.addEventListener("click", async () => {
+                const datosPago =
+                    "Banco: Venezuela\nTeléfono: 04243662542\nC.I: 17062239";
+
+                try {
+                    await navigator.clipboard.writeText(datosPago);
+
+                    // Efecto visual temporal de éxito
+                    const originalHTML = btnCopiar.innerHTML;
+                    btnCopiar.innerHTML = "<span>✨</span> ¡Datos copiados!";
+                    btnCopiar.classList.remove(
+                        "bg-amber-50",
+                        "text-amber-900",
+                        "border-amber-200/80",
+                    );
+                    btnCopiar.classList.add(
+                        "bg-emerald-50",
+                        "text-emerald-800",
+                        "border-emerald-200",
+                    );
+
+                    setTimeout(() => {
+                        btnCopiar.innerHTML = originalHTML;
+                        btnCopiar.classList.remove(
+                            "bg-emerald-50",
+                            "text-emerald-800",
+                            "border-emerald-200",
+                        );
+                        btnCopiar.classList.add(
+                            "bg-amber-50",
+                            "text-amber-900",
+                            "border-amber-200/80",
+                        );
+                    }, 2000);
+                } catch (err) {
+                    console.error("Error al copiar al portapapeles:", err);
+                }
+            });
+        </script>
     </body>
 </html>
