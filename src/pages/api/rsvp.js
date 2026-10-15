@@ -16,7 +16,6 @@ export const POST = async ({ request }) => {
         nombre: data.nombre,
         asistira: data.asistira,
         pases: parseInt(data.pases),
-        restricciones: data.restricciones || ''
       }
     ]);
 
